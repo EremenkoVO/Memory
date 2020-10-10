@@ -28,9 +28,21 @@ export class GameScene extends Phaser.Scene {
    */
   create() {
     this.createBackground();
+    this.createText();
     this.createCards();
     this.start();
   }
+
+  /**
+   * Create Text
+   */
+  createText() {
+    this.timeoutText = this.add.text(10, 670, "Time:", {
+      font: "36px Arial",
+      fill: "#ffffff",
+    });
+  }
+
   /**
    * Start
    */
