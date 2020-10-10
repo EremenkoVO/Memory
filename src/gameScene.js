@@ -5,6 +5,7 @@ var configCards = {
   rows: 2,
   cols: 5,
   cards: [1, 2, 3, 4, 5],
+  timeout: 30,
 };
 
 export class GameScene extends Phaser.Scene {
@@ -27,17 +28,39 @@ export class GameScene extends Phaser.Scene {
    * Output background
    */
   create() {
+    this.timeout = configCards.timeout;
+    this.createTimer();
     this.createBackground();
     this.createText();
     this.createCards();
     this.start();
   }
-
+  /**
+   * Game Timer
+   */
+  createTimer() {
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.onTimerTick,
+      callbackScope: this,
+      loop: true,
+    });
+  }
+  /**
+   * Function Timer
+   */
+  onTimerTick() {
+    this.timeoutText.setText(`Time: ${this.timeout}`);
+    if (this.timeout <= 0) {
+      this.start();
+    }
+    --this.timeout;
+  }
   /**
    * Create Text
    */
   createText() {
-    this.timeoutText = this.add.text(10, 670, "Time:", {
+    this.timeoutText = this.add.text(10, 670, "", {
       font: "36px Arial",
       fill: "#ffffff",
     });
@@ -47,6 +70,7 @@ export class GameScene extends Phaser.Scene {
    * Start
    */
   start() {
+    this.timeout = configCards.timeout;
     this.openedCard = null;
     this.openedCardsCount = 0;
     this.initCards();
