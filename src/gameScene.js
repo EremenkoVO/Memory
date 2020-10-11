@@ -16,6 +16,7 @@ export class GameScene extends Phaser.Scene {
    * Load client background
    */
   preload() {
+    //image
     this.load.image("bg", "./assets/background.png");
     this.load.image("card", "./assets/card.png");
     this.load.image("card1", "./assets/card1.png");
@@ -23,12 +24,20 @@ export class GameScene extends Phaser.Scene {
     this.load.image("card3", "./assets/card3.png");
     this.load.image("card4", "./assets/card4.png");
     this.load.image("card5", "./assets/card5.png");
+
+    //audio
+    this.load.audio("card", "./assets/card.mp3");
+    this.load.audio("complete", "./assets/complete.mp3");
+    this.load.audio("success", "./assets/success.mp3");
+    this.load.audio("theme", "./assets/theme.mp3");
+    this.load.audio("timeout", "./assets/timeout.mp3");
   }
   /**
    * Output background
    */
   create() {
     this.timeout = configCards.timeout;
+    this.createSounds();
     this.createTimer();
     this.createBackground();
     this.createText();
@@ -52,6 +61,7 @@ export class GameScene extends Phaser.Scene {
   onTimerTick() {
     this.timeoutText.setText(`Time: ${this.timeout}`);
     if (this.timeout <= 0) {
+      this.sounds.timeout.play();
       this.start();
     }
     --this.timeout;
@@ -73,6 +83,9 @@ export class GameScene extends Phaser.Scene {
     this.timeout = configCards.timeout;
     this.openedCard = null;
     this.openedCardsCount = 0;
+    this.sounds.theme.play({
+      volume: 0.1,
+    });
     this.initCards();
   }
   /**
@@ -118,8 +131,11 @@ export class GameScene extends Phaser.Scene {
       return false;
     }
 
+    this.sounds.card.play();
+
     if (this.openedCard) {
       if (this.openedCard.value === card.value) {
+        this.sounds.success.play();
         this.openedCard = null;
         ++this.openedCardsCount;
       } else {
@@ -133,6 +149,7 @@ export class GameScene extends Phaser.Scene {
     card.open();
 
     if (this.openedCardsCount === this.cards.length / 2) {
+      this.sounds.complete.play();
       this.start();
     }
   }
@@ -159,5 +176,18 @@ export class GameScene extends Phaser.Scene {
         });
     }
     return Phaser.Utils.Array.Shuffle(position);
+  }
+  /**
+   * Create sounds for game
+   */
+  createSounds() {
+    this.sounds = {
+      card: this.sound.add("card"),
+      complete: this.sound.add("complete"),
+      success: this.sound.add("success"),
+      theme: this.sound.add("theme"),
+      timeout: this.sound.add("timeout"),
+    };
+    console.log(this.sounds);
   }
 }
