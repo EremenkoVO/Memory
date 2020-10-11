@@ -188,6 +188,5 @@ export class GameScene extends Phaser.Scene {
       theme: this.sound.add("theme"),
       timeout: this.sound.add("timeout"),
     };
-    console.log(this.sounds);
   }
 }
