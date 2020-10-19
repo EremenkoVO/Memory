@@ -8,6 +8,7 @@
 
 Игра была написана в рамках изучения курса на Udemy по Phaser.js
 
+## Курс: https://www.udemy.com/course/phaser-3/
 ---
 Установка приложения
 ```sh
